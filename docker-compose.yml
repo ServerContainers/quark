@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  quark:
+    build: .
+    image: servercontainers/quark
+    restart: always
+    volumes:
+      - ./data:/data
+    ports:
+      - "80:80"
+    networks:
+      - quark
+
+networks:
+  quark:
+    driver: bridge
