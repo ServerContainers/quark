@@ -3,6 +3,7 @@ FROM alpine
 RUN apk --no-cache add git make gcc libc-dev \
  && git clone git://git.suckless.org/quark \
  && cd quark \
+ && git log -1 | grep Date: > /version \
  && make \
  && cp quark /bin/ \
  \
