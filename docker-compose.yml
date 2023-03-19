@@ -3,7 +3,7 @@ version: '3.3'
 services:
   quark:
     build: .
-    image: servercontainers/quark
+    image: quark
     restart: always
     volumes:
       - ./data:/data
