@@ -1,4 +1,4 @@
-# Docker Webserver quark build yourself container
+# Docker Webserver quark - (ghcr.io/servercontainers/quark) [x86 + arm]
 _maintained by ServerContainers_
 
 [FAQ - All you need to know about the servercontainers Containers](https://marvin.im/docker-faq-all-you-need-to-know-about-the-marvambass-containers/)
@@ -18,8 +18,7 @@ I'm not going to do that. It's more of a professionally done hobby then a
 professional job I'm earning money with.
 
 In order to avoid bad actors taking over my org. names and publishing potenial
-backdoored containers, I'd recommend to switch over clone my github repos and
-build the containers yourself.
+backdoored containers, I'd recommend to switch over to my new github registry: `ghcr.io/servercontainers`.
 
 ## Build & Variants
 
@@ -34,6 +33,9 @@ To build a `latest` tag run `./build.sh release`
 
 ## Changelogs
 
+* 2023-03-20
+    * github action to build container
+    * implemented ghcr.io as new registry
 * 2023-03-19
     * switched from docker hub to a build-yourself container
 * 2022-10-30
@@ -41,9 +43,13 @@ To build a `latest` tag run `./build.sh release`
 
 ## What is it
 
-This Dockerfile (available as ___servercontainers/quark___) gives you an inofficial build of the suckless.org static web server `quark`. The image is super tiny and based on alpine. More info here: https://tools.suckless.org/quark/
+This Dockerfile (available as ___ghcr.io/servercontainers/quark___) gives you an inofficial build of the suckless.org static web server `quark`. The image is super tiny and based on alpine. More info here: https://tools.suckless.org/quark/
 
 It's based on the [_/alpine](https://registry.hub.docker.com/_/alpine/) Image
+
+View in GitHub Registry [ghcr.io/servercontainers/quark](https://ghcr.io/servercontainers/quark)
+
+View in GitHub [ServerContainers/quark](https://github.com/ServerContainers/quark)
 
 ## Volumes
 
