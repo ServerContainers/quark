@@ -1,17 +1,19 @@
-FROM alpine
+FROM alpine:3.22 AS builder
 
 RUN apk --no-cache add git make gcc libc-dev \
  && git clone git://git.suckless.org/quark \
  && cd quark \
  && git log -1 | grep Date: > /version \
  && make \
- && cp quark /bin/ \
- \
- && cd .. \
- && rm -rf /quark \
- && apk del git make gcc libc-dev \
- \
- && mkdir /data
+ && cp quark /quark-bin
+
+
+FROM alpine:3.22
+
+COPY --from=builder /quark-bin /bin/quark
+COPY --from=builder /version /version
+
+RUN mkdir /data
 
 EXPOSE 80
 
