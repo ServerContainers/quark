@@ -5,7 +5,6 @@ set -eu
 
 IMAGE=quark-test
 NAME=quark-test-run
-DOCROOT=$(mktemp -d)
 MARKER="quark-smoke-test-$$-ok"
 
 FAILED=0
@@ -17,12 +16,8 @@ fail() {
 cleanup() {
   echo ">> cleanup: removing container $NAME"
   docker rm -f "$NAME" >/dev/null 2>&1 || true
-  rm -rf "$DOCROOT" || true
 }
 trap cleanup EXIT INT TERM
-
-echo ">> preparing docroot $DOCROOT"
-echo "$MARKER" > "$DOCROOT/index.html"
 
 echo ">> building image $IMAGE"
 docker build -t "$IMAGE" .
@@ -30,7 +25,7 @@ docker build -t "$IMAGE" .
 echo ">> (re)starting container $NAME"
 docker rm -f "$NAME" >/dev/null 2>&1 || true
 # quark serves /data on port 80 (see Dockerfile CMD)
-docker run -d --name "$NAME" -v "$DOCROOT":/data "$IMAGE"
+docker run -d --name "$NAME" "$IMAGE"
 
 echo ">> waiting for quark to come up (up to ~30s)"
 READY=0
@@ -65,12 +60,17 @@ if docker ps --format '{{.Names}}' | grep -q "^${NAME}$"; then
     fail "quark process not found"
   fi
 
+  # write the marker into quark's docroot inside the container (no host bind-mount,
+  # so this behaves identically locally and on CI runners)
+  echo ">> placing marker file into /data"
+  docker exec "$NAME" sh -c "printf '%s' '$MARKER' > /data/index.html" || fail "could not write into /data"
+
   echo ">> assert: quark serves the file over HTTP with the right content"
   BODY=""
   n=0
   while [ "$n" -lt 15 ]; do
     BODY=$(docker exec "$NAME" wget -qO- http://127.0.0.1:80/index.html 2>/dev/null || true)
-    [ -n "$BODY" ] && break
+    [ "$BODY" = "$MARKER" ] && break
     n=$((n + 1))
     sleep 1
   done
