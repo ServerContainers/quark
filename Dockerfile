@@ -1,4 +1,4 @@
-FROM alpine:3.22 AS builder
+FROM alpine AS builder
 
 RUN apk --no-cache add git make gcc libc-dev \
  && git clone git://git.suckless.org/quark \
@@ -8,7 +8,7 @@ RUN apk --no-cache add git make gcc libc-dev \
  && cp quark /quark-bin
 
 
-FROM alpine:3.22
+FROM alpine
 
 COPY --from=builder /quark-bin /bin/quark
 COPY --from=builder /version /version
